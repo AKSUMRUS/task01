@@ -21,18 +21,19 @@ public class Server {
     }
     public static void handle(Socket s) {
         try {
-            InputStream reader = s.getInputStream();
-            byte[] buffer = new byte[4096];
+//            InputStream reader = s.getInputStream();
+//            byte[] buffer = new byte[4096];
+            BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
             PrintWriter writer = new PrintWriter(s.getOutputStream(), true);
             while (s.isConnected()) {
                 int n = 0;
 
-                while (reader.available() > 0 && (n = reader.read(buffer)) != -1) {}
+//                while (reader.available() > 0 && (n = reader.read(buffer)) != -1) {}
+                reader.readLine();
 
-                if(n > 0) {
-                    String timeStamp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
-                    writer.println(timeStamp);
-                }
+
+                String timeStamp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
+                writer.println(timeStamp);
             }
         } catch (IOException e) {
             e.printStackTrace();

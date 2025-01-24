@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Client {
@@ -15,16 +16,19 @@ public class Client {
         try (Socket s = new Socket(ip, port);
                 FileWriter fileWriter = new FileWriter("result.txt");) {
             s.setTcpNoDelay(true); // TCP_NO_DELAY = true
-            OutputStream writer = s.getOutputStream();
+//            OutputStream writer = s.getOutputStream();
+            PrintWriter writer = new PrintWriter(new DataOutputStream(s.getOutputStream()));
             BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
             for (int K = 0; K < M; K++) {
                 int len = N * K + 8;
                 double time = 0;
                 for (int i = 0; i < Q; i++) {
-                    byte[] array = new byte[len];
+                    byte[] array = new byte[len+1];
                     new Random().nextBytes(array);
+                    array[len] = '\n';
                     long before = System.currentTimeMillis();
-                    writer.write(array);
+                    writer.println(Arrays.toString(array) + "\n");
+//                    writer.write(array);
                     writer.flush();
 
                     reader.readLine();
